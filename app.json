@@ -1,0 +1,71 @@
+{
+  "expo": {
+    "entrypoint": "expo-router/entry",
+    "name": "Samadhan Setu",
+    "slug": "samadhan-setu",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "Samadhan Setu",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash.png", 
+      "resizeMode": "contain",
+      "backgroundColor": "#080393"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9aeabe92-8500-41a7-9236-5debf18359db"
+      }
+    }
+  },
+  "android": {
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/images/adaptive-icon.png",
+      "backgroundColor": "#ffffff"
+    },
+    "package": "com.connect.samadhansetu"
+  },
+  "ios": {
+    "supportsTablet": true,
+    "simulator": true,
+    "bundleIdentifier": "com.connect.samadhansetu"
+  },
+  "web": {
+    "bundler": "metro",
+    "output": "static",
+    "favicon": "./assets/images/favicon.png"
+  },
+  "plugins": [
+    "expo-router",
+    "expo-secure-store",
+    [
+      "@react-native-google-signin/google-signin",
+      {
+        "iosUrlScheme": "com.googleusercontent.apps.802041688593-dmeid7sob74hntnkas38pag2ict2b31v"
+      }
+    ]
+  ],
+  "experiments": {
+    "typedRoutes": true
+  },
+  "packagerOpts": {
+    "sourceExts": [
+      "js",
+      "json",
+      "ts",
+      "tsx",
+      "jsx",
+      "vue"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  },
+  "extra": {
+    "eas": {
+      "projectId": "802041688593-dmeid7sob74hntnkas38pag2ict2b31v.apps.googleusercontent.com"
+    }
+  }
+}

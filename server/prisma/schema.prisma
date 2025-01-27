@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum UrgencyLevel {
+  Low
+  Medium
+  High
+  Critical
+}
+
+enum ComplaintStatus {
+  Pending
+  InProgress
+  Resolved
+  Reopened
+  Escalated
+}
+
+model Complaint {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String
+  photo         String?
+  contactInfo   String
+  urgencyLevel  UrgencyLevel    @default(Low)
+  status        ComplaintStatus @default(Pending)
+  departmentId  String          @db.ObjectId
+  department    Department      @relation("DepartmentComplaints", fields: [departmentId], references: [id], onDelete: Cascade)
+  assignedTo    String?         @db.ObjectId
+  assignedUser  User?           @relation("AssignedComplaints", fields: [assignedTo], references: [id])
+  escalatedTo   String?         @db.ObjectId
+  escalatedUser User?           @relation("EscalatedComplaints", fields: [escalatedTo], references: [id])
+  citizenId     String          @db.ObjectId
+  citizen       User            @relation("CitizenComplaints", fields: [citizenId], references: [id])
+  notifications Notification[]  @relation("ComplaintNotifications")
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model Department {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  complaints  Complaint[] @relation("DepartmentComplaints")
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Notification {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  message     String
+  status      String    @default("Unread")
+  complaintId String    @db.ObjectId
+  complaint   Complaint @relation("ComplaintNotifications", fields: [complaintId], references: [id])
+  receiverId  String    @db.ObjectId
+  receiver    User      @relation("UserNotifications", fields: [receiverId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model User {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  email         String         @unique
+  phone         String
+  role          Role           @default(User)
+  complaints    Complaint[]    @relation("CitizenComplaints")
+  assigned      Complaint[]    @relation("AssignedComplaints")
+  escalated     Complaint[]    @relation("EscalatedComplaints")
+  notifications Notification[] @relation("UserNotifications")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+enum Role {
+  User
+  FieldStaff
+  BranchHead
+  Commissioner
+}
